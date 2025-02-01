@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { color, fontSize, layoutWidth } from '@/styles/base';
+import { color, fontSize, fontWeight, layoutWidth } from '@/styles/base';
 
 const TemplateWrapper = styled.header`
   position: fixed;
@@ -14,6 +14,7 @@ const TemplateWrapper = styled.header`
   word-break: keep-all;
   overflow-x: auto;
   overflow-y: hidden;
+  background-color: ${color.white};
 `;
 
 const TemplateInner = styled.div`
@@ -27,10 +28,18 @@ const TemplateInner = styled.div`
   max-width: ${layoutWidth};
 `;
 
+const MainLogo = styled.span`
+  font-size: ${fontSize.xl};
+  color: ${color['primary-500']};
+  font-weight: ${fontWeight.semibold};
+`;
+
 const Header: React.FC = () => {
   return (
     <TemplateWrapper>
-      <TemplateInner>Header</TemplateInner>
+      <TemplateInner>
+        <MainLogo>Loop-List</MainLogo>
+      </TemplateInner>
     </TemplateWrapper>
   );
 };
