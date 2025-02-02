@@ -47,6 +47,17 @@ const UserInfoSection = styled.div`
   }
 `;
 
+const DescriptionSection = styled.div`
+  margin: auto;
+  max-width: ${layoutWidth};
+  width: 100%;
+  padding: 0 ${spacing[4]};
+  font-size: ${fontSize.base};
+  color: ${color['gray-400']};
+  line-height: 1.6;
+  white-space: pre-line;
+`;
+
 const PlaylistHeader = styled.div`
   width: 100%;
   background-color: ${color['primary-900']};
@@ -420,6 +431,10 @@ const PlaylistDetailPage: React.FC = () => {
     alert('링크가 복사되었습니다!');
   };
 
+  const playlistDescription = `이 플레이리스트는 2024년 공모전을 위해 제작된 믹스입니다. 
+24년 방영작을 중심으로 한 다양한 애니메이션 오프닝과 엔딩, 아이돌, 보컬로이드 곡들로 구성되어 있습니다.
+총 27곡으로 구성된 이 플레이리스트는 약 40분 분량의 애니송을 즐길 수 있습니다.`;
+
   return (
     <TemplateWrapper>
       <PlaylistHeader>
@@ -474,6 +489,17 @@ const PlaylistDetailPage: React.FC = () => {
           </div>
         </div>
       </UserInfoSection>
+
+      <DescriptionSection>
+        <div className='content'>
+          {playlistDescription.split('\n').map((line, index) => (
+            <React.Fragment key={index}>
+              {line}
+              <br />
+            </React.Fragment>
+          ))}
+        </div>
+      </DescriptionSection>
 
       <TrackListContainer>
         <h1>플레이리스트</h1>
