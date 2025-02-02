@@ -55,7 +55,7 @@ const SearchButton = styled.button`
 
 const PlaylistSearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchType, setSearchType] = useState<'title' | 'tag'>('title');
+  const [searchType] = useState<'title' | 'tag'>('title');
 
   // 임시 데이터 (실제로는 API에서 가져옴)
   const playlists = [1, 2, 3, 4, 5, 6, 7].map((val) => ({

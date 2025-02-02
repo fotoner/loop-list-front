@@ -401,15 +401,13 @@ const sampleTracks: Track[] = [
 
 interface PlaylistData {
   title: string;
-  author: string;
   date: string;
   trackCount: number;
   tags: string[];
 }
 
 const playlistData: PlaylistData = {
-  title: '운지! 공모 믹스',
-  author: 'DJ 포토네',
+  title: '다이브! 공모 믹스',
   date: '2024.03.15',
   trackCount: 27,
   tags: ['애니송', '원곡', '공모'],

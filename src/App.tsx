@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -11,6 +11,10 @@ const AppContent: React.FC = () => {
   const location = useLocation();
   const nodeRef = useRef(null);
 
+  // 페이지 전환 시 스크롤을 상단으로 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   return (
     <>
       <Header />

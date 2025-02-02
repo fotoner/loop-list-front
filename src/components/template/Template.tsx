@@ -11,7 +11,7 @@ const TemplateWrapper = styled.article`
   position: relative;
   flex-direction: column;
   width: 100%;
-  margin: ${fontSize['5xl']} auto;
+  margin-top: ${fontSize['5xl']};
 `;
 
 const Article: React.FC<ArticleProps> = ({ children }) => {
