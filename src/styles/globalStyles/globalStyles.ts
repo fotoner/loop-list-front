@@ -212,6 +212,27 @@ const globalStyles = css`
       'Apple Color Emoji',
       'Noto Color Emoji';
   }
-`;
 
+  .page-transition-enter {
+    opacity: 0;
+  }
+
+  .page-transition-enter-active {
+    opacity: 1;
+    transition:
+      opacity 300ms ease-in-out,
+      transform 300ms ease-in-out;
+  }
+
+  .page-transition-exit {
+    opacity: 1;
+  }
+
+  .page-transition-exit-active {
+    opacity: 0;
+    transition:
+      opacity 300ms ease-in-out,
+      transform 300ms ease-in-out;
+  }
+`;
 export default globalStyles;
