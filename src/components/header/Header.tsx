@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { color, fontSize, fontWeight, layoutWidth } from '@/styles/base';
+import { color, fontSize, fontWeight, layoutWidth, spacing } from '@/styles/base';
 
 const TemplateWrapper = styled.header`
   position: fixed;
@@ -29,16 +30,69 @@ const TemplateInner = styled.div`
 `;
 
 const MainLogo = styled.span`
-  font-size: ${fontSize.xl};
+  font-size: ${fontSize['2xl']};
   color: ${color['primary-500']};
   font-weight: ${fontWeight.semibold};
+  display: flex;
+  align-items: center;
+`;
+
+const Links = styled.div`
+  margin-left: ${spacing[4]};
+  display: flex;
+  gap: ${spacing[2]};
+`;
+
+const StyledLink = styled(Link)`
+  color: ${color['gray-600']};
+  font-size: ${fontSize.base};
+  font-weight: ${fontWeight.semibold};
+  text-decoration: none;
+  padding: ${spacing[2]} ${spacing[3]};
+  border-radius: ${spacing[1]};
+  transition: all 0.2s ease-in-out;
+  position: relative;
+
+  &:hover {
+    color: ${color['primary-500']};
+    background-color: ${color['gray-50']};
+  }
+
+  &.active {
+    color: ${color['primary-500']};
+    font-weight: ${fontWeight.semibold};
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: ${color['primary-500']};
+    }
+  }
 `;
 
 const Header: React.FC = () => {
+  const location = useLocation();
   return (
     <TemplateWrapper>
       <TemplateInner>
-        <MainLogo>Loop-List</MainLogo>
+        <MainLogo>
+          <Link to='/'>Event-Loop</Link>
+        </MainLogo>
+        <Links>
+          <StyledLink to='/' className={location.pathname === '/' ? 'active' : ''}>
+            홈
+          </StyledLink>
+          <StyledLink
+            to='/playlists'
+            className={location.pathname === '/playlists' ? 'active' : ''}
+          >
+            플레이리스트
+          </StyledLink>
+        </Links>
       </TemplateInner>
     </TemplateWrapper>
   );
