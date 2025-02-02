@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { color, fontSize, fontWeight, layoutWidth, spacing } from '@/styles/base';
+import { LinkButton } from '../common/Button';
 
 const TemplateWrapper = styled.header`
   position: fixed;
@@ -35,6 +36,9 @@ const MainLogo = styled.span`
   font-weight: ${fontWeight.semibold};
   display: flex;
   align-items: center;
+  a {
+    color: ${color['primary-500']};
+  }
 `;
 
 const Links = styled.div`
@@ -74,6 +78,10 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const Padding = styled.div`
+  flex: 1 0 0;
+`;
+
 const Header: React.FC = () => {
   const location = useLocation();
   return (
@@ -93,6 +101,10 @@ const Header: React.FC = () => {
             플레이리스트
           </StyledLink>
         </Links>
+        <Padding />
+        <LinkButton backgroundColor={color['gray-30']} to='/login'>
+          로그인
+        </LinkButton>
       </TemplateInner>
     </TemplateWrapper>
   );

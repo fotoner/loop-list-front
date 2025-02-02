@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { borderRadius, color, fontSize, fontWeight, spacing } from '@/styles/base';
 
-const Card = styled.div<{ variant?: 'default' | 'more' }>`
+const Card = styled(Link)<{ variant?: 'default' | 'more' }>`
   background: ${color.white};
   border-radius: ${borderRadius['1.5']};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -60,6 +61,7 @@ const PlaylistInfo = styled.div`
     font-size: ${fontSize.lg};
     font-weight: ${fontWeight.semibold};
     margin-bottom: ${spacing[1]};
+    color: ${color['primary-500']};
   }
 
   p {
@@ -92,6 +94,7 @@ const PlaylistGrid = styled.div`
 `;
 
 interface PlaylistCardProps {
+  id?: number;
   variant?: 'default' | 'more';
   coverImage?: string;
   title: string;
@@ -102,6 +105,7 @@ interface PlaylistCardProps {
 }
 
 const PlaylistCard: React.FC<PlaylistCardProps> = ({
+  id,
   variant = 'default',
   coverImage,
   title,
@@ -112,14 +116,14 @@ const PlaylistCard: React.FC<PlaylistCardProps> = ({
 }) => {
   if (variant === 'more') {
     return (
-      <Card variant='more' onClick={onClick}>
+      <Card to='/playlists' variant='more' onClick={onClick}>
         <h3>{title}</h3>
       </Card>
     );
   }
 
   return (
-    <Card>
+    <Card to={`/playlists/${id}`}>
       <PlaylistImage>
         <img src={coverImage} alt='플레이리스트 커버' />
       </PlaylistImage>

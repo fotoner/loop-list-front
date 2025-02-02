@@ -6,6 +6,7 @@ interface ButtonProps {
   width?: string;
   backgroundColor?: string;
   textColor?: string;
+  hoverBackgroundColor?: string;
 }
 
 const buttonStyles = `
@@ -33,6 +34,13 @@ export const Button = styled.button<ButtonProps>`
   ${({ width }) => width && `width: ${width};`}
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor};`}
   ${({ textColor }) => textColor && `color: ${textColor};`}
+  ${({ hoverBackgroundColor }) =>
+    hoverBackgroundColor &&
+    `
+    &:hover {
+      background-color: ${hoverBackgroundColor};
+    }
+  `}
 `;
 
 export const LinkButton = styled(Link)<ButtonProps>`
@@ -41,4 +49,11 @@ export const LinkButton = styled(Link)<ButtonProps>`
   ${({ width }) => width && `width: ${width};`}
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor};`}
   ${({ textColor }) => textColor && `color: ${textColor};`}
+  ${({ hoverBackgroundColor }) =>
+    hoverBackgroundColor &&
+    `
+    &:hover {
+      background-color: ${hoverBackgroundColor};
+    }
+  `}
 `;

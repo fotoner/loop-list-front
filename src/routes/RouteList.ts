@@ -15,7 +15,7 @@ const RouteList = [
     component: PlaylistSearchPage,
   },
   {
-    path: '/playlists/@{id}',
+    path: '/playlists/:id',
     name: 'detail',
     component: PlaylistDetailPage,
   },

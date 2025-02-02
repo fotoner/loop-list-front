@@ -51,8 +51,9 @@ const LayoutContainer = styled.div`
 `;
 
 const MainPage: React.FC = () => {
-  const playlists = [1, 2, 3, 4, 5, 6, 7].map(() => ({
+  const playlists = [1, 2, 3, 4, 5, 6, 7].map((val) => ({
     coverImage: AlbumCover,
+    id: val,
     title: '다이브 공모 믹스',
     author: '포토네',
     date: '2024.03.15',
