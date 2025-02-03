@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { color, fontSize, fontWeight, layoutWidth, spacing } from '@/styles/base';
 import { Button } from '@/components/common/Button';
@@ -6,6 +6,8 @@ import { parse } from 'papaparse';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import DeleteIcon from '@/assets/icons/DeleteIcon.svg';
 import { useDropzone } from 'react-dropzone';
+import Input from '@/components/common/Input';
+import FormGroup from '@/components/common/FormGroup';
 
 const TemplateWrapper = styled.div`
   display: flex;
@@ -28,38 +30,6 @@ const FormSection = styled.div`
     font-weight: ${fontWeight.semibold};
     color: ${color['primary-500']};
     margin-bottom: ${spacing[2]};
-  }
-`;
-
-const InputField = styled.input`
-  width: 100%;
-  padding: ${spacing[2]};
-  border: 1px solid ${color['gray-500']};
-  border-radius: ${spacing[1]};
-  font-size: ${fontSize.base};
-  color: ${color['gray-900']};
-  background-color: ${color['gray-30']};
-
-  &:focus {
-    outline: none;
-    border-color: ${color['primary-500']};
-  }
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  height: ${spacing[40]};
-  padding: ${spacing[2]};
-  border: 1px solid ${color['gray-500']};
-  border-radius: ${spacing[1]};
-  font-size: ${fontSize.base};
-  color: ${color['gray-900']};
-  background-color: ${color['gray-30']};
-  resize: vertical;
-
-  &:focus {
-    outline: none;
-    border-color: ${color['primary-500']};
   }
 `;
 
@@ -120,13 +90,31 @@ const BPMInput = styled.input`
   text-align: left;
 `;
 
+const AlbumCoverUpload = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${spacing[4]};
+  margin-bottom: ${spacing[6]};
+`;
+
+const AlbumCoverPreview = styled.div<{ imageUrl?: string }>`
+  width: ${spacing[40]};
+  height: ${spacing[40]};
+  border-radius: ${spacing[2]};
+  background-color: ${color['gray-300']};
+  background-image: url(${(props) => props.imageUrl});
+  background-size: cover;
+  background-position: center;
+  border: 2px solid ${color['gray-500']};
+`;
+
 const Dropzone = styled.div`
   border: 2px dashed ${color['gray-500']};
   border-radius: ${spacing[2]};
-  padding: ${spacing[6]};
+  padding: ${spacing[4]};
   text-align: center;
   cursor: pointer;
-  margin-bottom: ${spacing[4]};
   background-color: ${color['gray-30']};
   &:hover {
     border-color: ${color['primary-500']};
@@ -159,13 +147,14 @@ const AddTrackButton = styled(Button)`
   margin-top: ${spacing[2]};
 `;
 
-const PlaylistCreatePage = () => {
-  const [title, setTitle] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [tags, setTags] = React.useState<string[]>([]);
-  const [newTag, setNewTag] = React.useState('');
-  const [tracks, setTracks] = React.useState<Track[]>([]);
-  const [fileName, setFileName] = React.useState('');
+const PlaylistCreatePage: React.FC = () => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [newTag, setNewTag] = useState('');
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [fileName, setFileName] = useState('');
+  const [albumCover, setAlbumCover] = useState<string | null>(null);
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -203,6 +192,21 @@ const PlaylistCreatePage = () => {
       }
     },
   });
+
+  const { getRootProps: getAlbumCoverRootProps, getInputProps: getAlbumCoverInputProps } =
+    useDropzone({
+      accept: { 'image/*': ['.jpg', '.jpeg', '.png'] },
+      onDrop: (acceptedFiles) => {
+        const file = acceptedFiles[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            setAlbumCover(reader.result as string);
+          };
+          reader.readAsDataURL(file);
+        }
+      },
+    });
 
   const handleSubmit = () => {
     console.log({ title, description, tags, tracks });
@@ -243,39 +247,58 @@ const PlaylistCreatePage = () => {
     <TemplateWrapper>
       <FormContainer>
         <FormSection>
-          <h2>플레이리스트 제목</h2>
-          <InputField
-            type='text'
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder='플레이리스트 제목을 입력하세요'
-          />
+          <FormGroup label='플레이리스트 제목'>
+            <Input
+              type='text'
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder='플레이리스트 제목을 입력하세요'
+            />
+          </FormGroup>
         </FormSection>
 
         <FormSection>
-          <h2>설명</h2>
-          <TextArea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder='플레이리스트 설명을 입력하세요'
-          />
+          <h2>앨범 커버</h2>
+          <AlbumCoverUpload>
+            <AlbumCoverPreview imageUrl={albumCover || undefined} />
+            <Dropzone {...getAlbumCoverRootProps()}>
+              <input {...getAlbumCoverInputProps()} />
+              <p>앨범 커버 이미지를 드래그하거나 클릭하여 업로드하세요</p>
+              <p>(JPG, PNG 파일만 가능)</p>
+            </Dropzone>
+          </AlbumCoverUpload>
+        </FormSection>
+
+        <FormSection>
+          <FormGroup label='설명'>
+            <Input
+              type='textarea'
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder='플레이리스트 설명을 입력하세요'
+              rows={5}
+            />
+          </FormGroup>
         </FormSection>
 
         <FormSection>
           <h2>태그</h2>
-          <InputField
-            type='text'
-            value={newTag}
-            onChange={(e) => setNewTag(e.target.value)}
-            onKeyDown={handleAddTag}
-            placeholder='태그를 입력하고 엔터를 눌러 추가하세요'
-          />
           <TagInput>
             {tags.map((tag, index) => (
-              <Tag key={index} onClick={() => handleRemoveTag(tag)}>
+              <Tag key={index}>
                 {tag}
+                <DeleteButton onClick={() => handleRemoveTag(tag)}>
+                  <img src={DeleteIcon} alt='Delete' />
+                </DeleteButton>
               </Tag>
             ))}
+            <Input
+              type='text'
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              onKeyPress={handleAddTag}
+              placeholder='태그를 입력하고 엔터를 눌러 추가하세요'
+            />
           </TagInput>
         </FormSection>
 

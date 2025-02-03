@@ -502,7 +502,7 @@ const PlaylistDetailPage: React.FC = () => {
       </DescriptionSection>
 
       <TrackListContainer>
-        <h1>플레이리스트</h1>
+        <h1>트랙 목록</h1>
         <TrackTable>
           <thead>
             <tr>
