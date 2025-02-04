@@ -337,8 +337,16 @@ const PlaylistCreatePage: React.FC = () => {
                           draggableId={track.number.toString()}
                           index={index}
                         >
-                          {(provided) => (
-                            <tr ref={provided.innerRef} {...provided.draggableProps}>
+                          {(provided, snapshot) => (
+                            <tr
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={{
+                                ...provided.draggableProps.style,
+                                transform: snapshot.isDragging ? 'translate(0, 0)' : 'none',
+                              }}
+                            >
                               <td {...provided.dragHandleProps}>{track.number}</td>
                               <td>
                                 <EditableCell>
