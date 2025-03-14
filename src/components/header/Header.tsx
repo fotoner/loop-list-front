@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { color, fontSize, fontWeight, layoutWidth, spacing } from '@/styles/base';
+import { color, fontSize, fontWeight, layoutWidth, spacing, borderRadius } from '@/styles/base';
 import { LinkButton } from '../common/Button';
+import { useUserProfile } from '@/lib/service/user/use-user-service';
 
 const TemplateWrapper = styled.header`
   position: fixed;
@@ -84,6 +85,8 @@ const Padding = styled.div`
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const { data: user } = useUserProfile();
+
   return (
     <TemplateWrapper>
       <TemplateInner>
@@ -102,9 +105,35 @@ const Header: React.FC = () => {
           </StyledLink>
         </Links>
         <Padding />
-        <LinkButton backgroundColor={color['gray-30']} to='/login'>
-          로그인
-        </LinkButton>
+        {user ? (
+          <LinkButton
+            backgroundColor={color['gray-30']}
+            to='/user/me'
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: spacing[2],
+              padding: `${spacing[1.5]} ${spacing[3]}`,
+            }}
+          >
+            <img
+              src={user.data.data.picture}
+              alt={`${user.data.data.username}의 프로필`}
+              style={{
+                width: spacing[6],
+                height: spacing[6],
+                borderRadius: borderRadius.full,
+                objectFit: 'cover',
+                border: `${spacing.px} solid ${color['gray-100']}`,
+              }}
+            />
+            {user.data.data.username}
+          </LinkButton>
+        ) : (
+          <LinkButton backgroundColor={color['gray-30']} to='/login'>
+            로그인
+          </LinkButton>
+        )}
       </TemplateInner>
     </TemplateWrapper>
   );

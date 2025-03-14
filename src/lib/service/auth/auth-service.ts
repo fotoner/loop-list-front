@@ -23,11 +23,7 @@ export const logout = async () => {
 };
 
 export const reissueToken = async () => {
-  const accessToken = token.accessToken.get();
   return axios.get<ReissueTokenResponse>(`${import.meta.env.VITE_API_URL}/auth/reissue`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     withCredentials: true,
   });
 };

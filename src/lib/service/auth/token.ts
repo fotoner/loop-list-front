@@ -1,7 +1,7 @@
 import { accessTokenConfig } from '@/lib/service/auth/constants';
 import { getCookie, removeCookie, setCookie } from '@/lib/utils/cookie';
 
-function setAccessToken(accessToken: string | undefined): void {
+const setAccessToken = (accessToken: string | undefined): void => {
   if (!accessToken) {
     removeCookie(accessTokenConfig.name);
     return;
@@ -10,15 +10,15 @@ function setAccessToken(accessToken: string | undefined): void {
     maxAge: accessTokenConfig.expiration,
     path: '/',
   });
-}
+};
 
-function removeAccessToken(): void {
+const removeAccessToken = (): void => {
   removeCookie(accessTokenConfig.name);
-}
+};
 
-function getAccessToken(): string | undefined {
+const getAccessToken = (): string | undefined => {
   return getCookie(accessTokenConfig.name);
-}
+};
 
 const token = {
   accessToken: {

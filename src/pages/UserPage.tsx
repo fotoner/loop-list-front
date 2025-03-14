@@ -4,6 +4,9 @@ import { color, fontSize, fontWeight, layoutWidth, lineHeight, spacing } from '@
 import AlbumCover from '@/assets/image.png';
 import PlaylistCard, { PlaylistGrid } from '@/components/playlist/PlaylistCard';
 import Twitter from '@/assets/icons/x.svg';
+import { useUserProfile, useUser } from '@/lib/service/user/use-user-service';
+import { useParams } from 'react-router-dom';
+
 // import Mixcloud from '@/assets/icons/mixcloud.svg';
 
 const TemplateWrapper = styled.div`
@@ -101,8 +104,14 @@ const BioSection = styled.div`
 `;
 
 const UserPage: React.FC = () => {
+  const { id } = useParams();
+  const { data: meData } = useUserProfile();
+  const { data: userData } = useUser(id || '');
+
+  const userToBe = id === 'me' ? meData : userData;
+
   const user = {
-    name: '포토네',
+    name: userToBe?.data.data.username,
     playlists: 12,
     followers: 120,
     following: 80,
@@ -110,7 +119,7 @@ const UserPage: React.FC = () => {
       twitter: 'https://twitter.com/your-profile',
       mixcloud: 'https://www.mixcloud.com/your-profile/',
     },
-    bio: `안녕하세요, 포토네입니다!`,
+    bio: userToBe?.data.data.introduce,
   };
 
   const playlists = [1, 2, 3, 4, 5, 6].map((val) => ({
@@ -146,7 +155,7 @@ const UserPage: React.FC = () => {
 
       <BioSection>
         <div className='bio'>
-          {user.bio.split('\n').map((line, index) => (
+          {user.bio?.split('\n').map((line, index) => (
             <React.Fragment key={index}>
               {line}
               <br />

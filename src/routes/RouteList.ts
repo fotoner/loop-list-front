@@ -32,7 +32,7 @@ const RouteList = [
   },
   {
     path: '/user/edit',
-    name: 'user',
+    name: 'user-edit',
     component: UserEditPage,
   },
   {
