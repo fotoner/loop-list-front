@@ -6,6 +6,8 @@ import PlaylistSearchPage from '@/pages/PlaylistSearchPage';
 import SignupPage from '@/pages/SignupPage';
 import UserEditPage from '@/pages/UserEditPage';
 import UserPage from '@/pages/UserPage';
+import LoginRedirectPage from '@/pages/LoginRedirectPage';
+import LoginPage from '@/pages/LoginPage';
 
 const RouteList = [
   {
@@ -48,6 +50,16 @@ const RouteList = [
     path: '*',
     name: '404',
     component: NotFoundPage,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginPage,
+  },
+  {
+    path: '/login-redirect',
+    name: 'login-redirect',
+    component: LoginRedirectPage,
   },
 ];
 

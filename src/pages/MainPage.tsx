@@ -60,9 +60,7 @@ const MainPage: React.FC = () => {
     tags: ['애니송', '원곡', '공모'],
   }));
 
-  const handleLogin = () => {
-    /* 로그인 처리 로직 */
-  };
+  const handleLogin = () => {};
 
   return (
     <TemplateWrapper>
