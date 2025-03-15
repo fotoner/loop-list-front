@@ -9,6 +9,7 @@ import { useDropzone } from 'react-dropzone';
 import Input from '@/components/common/Input';
 import FormGroup from '@/components/common/FormGroup';
 import { useCreatePlaylist } from '@/lib/service/playlist/use-playlist-service';
+import { useNavigate } from 'react-router-dom';
 
 const TemplateWrapper = styled.div`
   display: flex;
@@ -156,6 +157,7 @@ const AddTrackButton = styled(Button)`
 `;
 
 const PlaylistCreatePage: React.FC = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState<string[]>([]);
@@ -230,6 +232,7 @@ const PlaylistCreatePage: React.FC = () => {
       })),
       cover: albumCover || undefined,
     });
+    navigate('/');
   };
 
   const onDragEnd = (result: DropResult) => {
