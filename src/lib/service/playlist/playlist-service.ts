@@ -28,3 +28,8 @@ export const fetchPlaylistByUserId = async (userId: string) => {
   const response = await axiosInstance.get<PlaylistsResponse>(`/playlist/user/${userId}`);
   return response.data;
 };
+
+export const deletePlaylist = async (id: string) => {
+  const response = await axiosInstance.delete<PlaylistResponse>(`/playlist/${id}`);
+  return response.data;
+};

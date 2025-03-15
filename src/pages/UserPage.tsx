@@ -115,7 +115,8 @@ const UserPage: React.FC = () => {
   const { data: meData } = useUserProfile();
   const { data: userData } = useUser(id || '');
 
-  const { data: playlists } = useFetchPlaylistByUserId(id || '');
+  const userId = id === 'me' ? meData?.data.data.userId : id;
+  const { data: playlists } = useFetchPlaylistByUserId(String(userId ?? ''));
 
   const userToBe = id === 'me' ? meData : userData;
 

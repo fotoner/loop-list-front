@@ -3,9 +3,10 @@ import styled from '@emotion/styled';
 import { color, fontSize, fontWeight, layoutWidth, spacing } from '@/styles/base';
 import AlbumCover from '@/assets/image.png';
 import { Button } from '@/components/common/Button';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useFetchPlaylist } from '@/lib/service/playlist/use-playlist-service';
-import { useUser } from '@/lib/service/user/use-user-service';
+import { useUser, useUserProfile } from '@/lib/service/user/use-user-service';
+import { useDeletePlaylist } from '@/lib/service/playlist/use-playlist-service';
 
 const TemplateWrapper = styled.div`
   display: flex;
@@ -227,12 +228,24 @@ const TrackTable = styled.table`
 
 const PlaylistDetailPage: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data: playlist } = useFetchPlaylist(id);
   const { data: user } = useUser(playlist?.userId ?? '');
+  const { data: me } = useUserProfile();
 
   const handleShareClick = () => {
     navigator.clipboard.writeText(window.location.href);
     alert('링크가 복사되었습니다!');
+  };
+
+  const { mutate: deletePlaylist } = useDeletePlaylist(id ?? '');
+
+  const handleDeleteClick = () => {
+    if (!window.confirm('플레이리스트를 삭제하시겠습니까?')) {
+      return;
+    }
+    deletePlaylist();
+    navigate('/');
   };
 
   if (!playlist) return null;
@@ -258,6 +271,22 @@ const PlaylistDetailPage: React.FC = () => {
               alt={playlistData.title}
             />
           </CoverImage>
+          {me?.data.data.userId && String(me?.data.data.userId) === playlist?.userId && (
+            <Button
+              onClick={handleDeleteClick}
+              backgroundColor={color['error-500']}
+              textColor={color['white']}
+              hoverBackgroundColor={color['error-600']}
+              style={{
+                position: 'absolute',
+                top: spacing[16],
+                right: spacing[4],
+                marginLeft: spacing[4],
+              }}
+            >
+              삭제하기
+            </Button>
+          )}
           <PlaylistInfo>
             <h1>{playlistData.title}</h1>
             <div className='metadata'>

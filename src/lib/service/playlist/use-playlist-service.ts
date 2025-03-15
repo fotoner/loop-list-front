@@ -5,6 +5,7 @@ import {
   fetchPlaylist,
   fetchPlaylistPage,
   fetchPlaylistByUserId,
+  deletePlaylist,
 } from './playlist-service';
 import { PlaylistData } from '@/types/playlist-types';
 import { Page } from '@/types/api-types';
@@ -54,5 +55,11 @@ export const useFetchPlaylistByUserId = (userId: string) => {
   return useQuery({
     queryKey: ['playlists', 'user', userId],
     queryFn: () => fetchPlaylistByUserId(userId),
+  });
+};
+
+export const useDeletePlaylist = (id: string) => {
+  return useMutation({
+    mutationFn: () => deletePlaylist(id),
   });
 };
