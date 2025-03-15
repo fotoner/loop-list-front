@@ -125,7 +125,7 @@ const PlaylistCard: React.FC<PlaylistCardProps> = ({
   return (
     <Card to={`/playlists/${id}`}>
       <PlaylistImage>
-        <img src={coverImage} alt='플레이리스트 커버' />
+        <img src={`${import.meta.env.VITE_API_URL}/upload/${coverImage}`} alt='플레이리스트 커버' />
       </PlaylistImage>
       <PlaylistInfo>
         <h3>{title}</h3>

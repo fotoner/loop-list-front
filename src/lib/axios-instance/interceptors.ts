@@ -49,7 +49,7 @@ export const errorInterceptor = async (error: AxiosError) => {
           throw new Error('Failed to reissue token');
         }
 
-        const { accessToken: newAccessToken } = response.data;
+        const { accessToken: newAccessToken } = response.data.data;
 
         // update token
         token.accessToken.set(newAccessToken);

@@ -3,6 +3,7 @@ import { ApiResponse } from './api-types';
 export interface UserResponseData {
   userId: number;
   username: string;
+  name: string;
   email: string;
   isPublic: boolean;
   introduce: string;

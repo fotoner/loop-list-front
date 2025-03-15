@@ -6,5 +6,5 @@ export const fetchMe = async () => {
 };
 
 export const fetchUser = async (id: string) => {
-  return axiosInstance.get<UserResponse>(`/user/${id}`);
+  return axiosInstance.get<UserResponse>(`/user/info/${id}`);
 };

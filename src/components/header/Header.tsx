@@ -118,7 +118,7 @@ const Header: React.FC = () => {
           >
             <img
               src={user.data.data.picture}
-              alt={`${user.data.data.username}의 프로필`}
+              alt={`${user.data.data.name}의 프로필`}
               style={{
                 width: spacing[6],
                 height: spacing[6],
@@ -127,7 +127,7 @@ const Header: React.FC = () => {
                 border: `${spacing.px} solid ${color['gray-100']}`,
               }}
             />
-            {user.data.data.username}
+            {user.data.data.name}
           </LinkButton>
         ) : (
           <LinkButton backgroundColor={color['gray-30']} to='/login'>

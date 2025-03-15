@@ -5,6 +5,9 @@ import Twitter from '@/assets/icons/x.svg';
 import AlbumCover from '@/assets/image.png';
 import PlaylistCard, { PlaylistGrid } from '@/components/playlist/PlaylistCard';
 import { LinkButton } from '@/components/common/Button';
+import { useUserProfile } from '@/lib/service/user/use-user-service';
+import { useFetchPlaylistsLatest } from '@/lib/service/playlist/use-playlist-service';
+import { PlaylistData } from '@/types/playlist-types';
 
 const TemplateWrapper = styled.div`
   display: flex;
@@ -51,15 +54,8 @@ const LayoutContainer = styled.div`
 `;
 
 const MainPage: React.FC = () => {
-  const playlists = [1, 2, 3, 4, 5, 6, 7].map((val) => ({
-    coverImage: AlbumCover,
-    id: val,
-    title: '다이브 공모 믹스',
-    author: '포토네',
-    date: '2024.03.15',
-    tags: ['애니송', '원곡', '공모'],
-  }));
-
+  const { data: playlists } = useFetchPlaylistsLatest();
+  const { data: user } = useUserProfile();
   const handleLogin = () => {};
 
   return (
@@ -69,21 +65,28 @@ const MainPage: React.FC = () => {
           <h1>Event, History, Share</h1>
           <h2>rekordbox 플레이리스트를 손쉽게 기록하고 공유해보세요</h2>
           <div className='gap'></div>
-          <LinkButton to='/login' width={spacing[35]} onClick={handleLogin}>
-            <img src={Twitter} alt='' />로 로그인하기
-          </LinkButton>
+          {user ? (
+            <LinkButton to='/playlists/create' width={spacing[45]}>
+              플레이리스트 만들기
+            </LinkButton>
+          ) : (
+            <LinkButton to='/login' width={spacing[35]} onClick={handleLogin}>
+              <img src={Twitter} alt='' />로 로그인하기
+            </LinkButton>
+          )}
         </MainInfoContainer>
       </MainInfo>
       <LayoutContainer>
         <h1>최신 플레이리스트</h1>
         <PlaylistGrid>
-          {playlists.map((playlist, index) => (
+          {playlists?.data?.data?.map((playlist: PlaylistData) => (
             <PlaylistCard
-              key={index}
-              coverImage={playlist.coverImage}
+              key={playlist.id}
+              id={playlist.id}
+              coverImage={playlist.cover || AlbumCover}
               title={playlist.title}
-              author={playlist.author}
-              date={playlist.date}
+              author={playlist.username}
+              date={new Date(playlist.createdAt).toLocaleDateString()}
               tags={playlist.tags}
             />
           ))}

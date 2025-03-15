@@ -3,11 +3,12 @@ import styled from '@emotion/styled';
 import { color, fontSize, fontWeight, layoutWidth, spacing } from '@/styles/base';
 import { Button } from '@/components/common/Button';
 import { parse } from 'papaparse';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import DeleteIcon from '@/assets/icons/DeleteIcon.svg';
 import { useDropzone } from 'react-dropzone';
 import Input from '@/components/common/Input';
 import FormGroup from '@/components/common/FormGroup';
+import { useCreatePlaylist } from '@/lib/service/playlist/use-playlist-service';
 
 const TemplateWrapper = styled.div`
   display: flex;
@@ -54,6 +55,13 @@ interface Track {
   artist: string;
   bpm: number;
   comment: string;
+}
+
+interface ParsedRow {
+  '트랙 제목': string;
+  아티스트: string;
+  BPM: string;
+  커멘트: string;
 }
 
 const EditableCell = styled.div`
@@ -155,6 +163,7 @@ const PlaylistCreatePage: React.FC = () => {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [fileName, setFileName] = useState('');
   const [albumCover, setAlbumCover] = useState<string | null>(null);
+  const { mutate: createPlaylist } = useCreatePlaylist();
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -175,10 +184,10 @@ const PlaylistCreatePage: React.FC = () => {
       const file = acceptedFiles[0];
       if (file) {
         setFileName(file.name);
-        parse(file, {
+        parse<ParsedRow>(file, {
           header: true,
           complete: (results) => {
-            const parsedTracks = results.data.map((row: any, index) => ({
+            const parsedTracks = results.data.map((row, index) => ({
               number: index + 1,
               title: row['트랙 제목'],
               artist: row['아티스트'],
@@ -209,10 +218,21 @@ const PlaylistCreatePage: React.FC = () => {
     });
 
   const handleSubmit = () => {
-    console.log({ title, description, tags, tracks });
+    createPlaylist({
+      title,
+      description,
+      tags,
+      songs: tracks.map((track) => ({
+        title: track.title,
+        artist: track.artist,
+        bpm: track.bpm.toString(),
+        genre: track.comment,
+      })),
+      cover: albumCover || undefined,
+    });
   };
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     const items = Array.from(tracks);
     const [reorderedItem] = items.splice(result.source.index, 1);
